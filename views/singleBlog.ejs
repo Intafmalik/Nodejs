@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Page</title>
+    <link rel="stylesheet" href="/style/singleBlogStyle.css">
+</head>
+<body>
+<%- include("./components/navbar")  %>
+
+    <div class="main-content">
+        <h1>Welcome to My Blog</h1>
+        <h2>Title: <span><%= singleBlog[0].title  %> </span></h2>
+        <h3>Subtitle: <span><%= singleBlog[0].subtitle  %> </span></h3>
+        <p>Description: <span> <%= singleBlog[0].description  %></span></p>
+        <p>Aliquam erat volutpat. Fusce euismod, turpis sed sollicitudin elementum, velit est feugiat sem, nec fermentum odio ligula a erat. Donec non dolor ut nisi placerat malesuada sit amet eu arcu.</p>
+        <button><a href="/delete/<%= singleBlog[0].id  %>">Delete</a></button>
+        <button><a href="/edit/<%= singleBlog[0].id %>">Update</a></button>
+    </div>
+
+</body>
+</html>
