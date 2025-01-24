@@ -21,7 +21,8 @@ exports.isAuthenticated = async (req,res,next)=>{
 
         return res.send("User with token doesnot exists")
     }else{
-        req.user = UserExits
+        req.user = UserExits // Aletrnative decryptedResult.id
+        req.userId = UserExits[0].id
         next()
     }
 }

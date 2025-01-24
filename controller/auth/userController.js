@@ -55,5 +55,6 @@ exports.loginPostMethod = async (req, res) => {
         }
     } else {
         res.send("User with that email doesnot exist")
+        // res.redirect("/register")
     }
 }

@@ -1,9 +1,14 @@
+const { where } = require("sequelize")
 const { blog, user } = require("../../model")
 
 
 exports.allBlog = async (req, res) => {
 
-    const allBlogs = await blog.findAll()
+    const allBlogs = await blog.findAll({
+        include:{
+            model:user
+        }
+    })
     // console.log(allBlogs)
     res.render("blog", { name: "Blogs", allBlogs })
 }
@@ -15,13 +20,24 @@ exports.renderCreateBlog = (req, res) => {
 exports.renderContactForm = (req, res) => {
     res.render("contact")
 }
-
 exports.postCreateBlog = async (req, res) => {
+    const filename = req.file.filename
+    console.log(filename)
     console.log(req.user[0].id, " userid from blog")
     const userId = req.user[0].id
 
     const { title, subtitle, description } = req.body
-    await blog.create({ title: title, subtitle: subtitle, description: description , userId:userId})
+    if(!title || !subtitle || !description || !filename )
+        return res.send("Fill the data to create the blog.")
+
+    await blog.create({ 
+        title: title,
+        subtitle: subtitle,
+        description: description ,
+        userId:userId,
+        image:process.env.PROJECT_URL+filename
+
+    })
     // console.log(req.body)
     res.redirect("/")
 
@@ -43,6 +59,9 @@ exports.renderSingleBlog =  async(req, res)=>{
 const singleBlog = await blog.findAll({
         where:{
             id:id
+        },
+        include:{
+            model:user
         }
     })
     // 2nd method it directly return an object formate like {}
@@ -99,4 +118,18 @@ exports.postEditblog = async(req,res)=>{
 exports.renderTemplate = (req, res)=>{
     res.render("template/resturant/index")
     
+}
+exports.renderMyblog = async(req, res)=>{
+    const userId = req.userId
+  const myblog = await blog.findAll({
+        where:{
+            userId:userId
+        },
+        include:{
+            model:user
+        }
+    })
+console.log(myblog)
+    res.render("myBlog",{myblog})
+
 }

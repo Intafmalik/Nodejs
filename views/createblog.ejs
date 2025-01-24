@@ -17,12 +17,14 @@
         <p style="margin: 0 0 20px; font-size: 14px; color: #666; line-height: 1.6;">
             Please fill out the form below with the required information. Fields marked with an asterisk (*) are mandatory.
         </p>
-        <form action="/createblog" method="post">
+        <form action="/createblog" method="post" enctype="multipart/form-data">
             <label for="name" style="display: block; margin-bottom: 5px; font-size: 14px; color: #333;">Title*</label>
             <input type="text" id="title" name="title" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
 
             <label for="email" style="display: block; margin-bottom: 5px; font-size: 14px; color: #333;">Subtitle *</label>
             <input type="text" id="subtitle" name="subtitle" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            <label for="image" style="display: block; margin-bottom: 5px; font-size: 14px; color: #333;">Image *</label>
+            <input type="file" id="image" name="image" style="width: 100%; padding: 10px; margin-bottom: 15px;  border-radius: 4px; font-size: 14px;">
 
             <label for="description" style="display: block; margin-bottom: 5px; font-size: 14px; color: #333;">Description</label>
             <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;"></textarea>

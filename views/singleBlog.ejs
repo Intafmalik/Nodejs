@@ -13,6 +13,8 @@
         <h1>Welcome to My Blog</h1>
         <h2>Title: <span><%= singleBlog[0].title  %> </span></h2>
         <h3>Subtitle: <span><%= singleBlog[0].subtitle  %> </span></h3>
+        <h3>Auther: <span><%= singleBlog[0].user.username  %> </span></h3>
+        <h3>Image: <img src="<%= singleBlog[0].image  %>" alt="image not found" height="200px" width="200px" /></h3>
         <p>Description: <span> <%= singleBlog[0].description  %></span></p>
         <p>Aliquam erat volutpat. Fusce euismod, turpis sed sollicitudin elementum, velit est feugiat sem, nec fermentum odio ligula a erat. Donec non dolor ut nisi placerat malesuada sit amet eu arcu.</p>
         <button><a href="/delete/<%= singleBlog[0].id  %>">Delete</a></button>

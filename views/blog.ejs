@@ -22,6 +22,8 @@
                         <%= blog.title %>
                     </h2>
                     <h4 style="margin: 0 0 15px; font-size: 18px; color: #555;"> Subtitle: <%= blog.subtitle %></h4>
+                    <h3 style="margin: 0 0 15px; font-size: 18px; color: #555;"> Auther: <%= blog.user.username %></h3>
+                    <h3>Image: <img src="<%= blog.image  %>" alt="image not found" height="200px" width="200px" /></h3>
                     <p style="margin: 0; font-size: 14px; color: #666; line-height: 1.6;">Description: <%= blog.description %>
                     </p>
                     <button>

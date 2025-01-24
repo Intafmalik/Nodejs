@@ -14,11 +14,11 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 // public folder chai jo le pani use garna dina lai
 app.use(express.static("public"))
+app.use(express.static("uploads"))
 
 app.use(cookieParser())
 
 require("./model/index")
-
 
 PORT = process.env.PORT || 3000
 
