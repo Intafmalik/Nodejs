@@ -58,3 +58,8 @@ exports.loginPostMethod = async (req, res) => {
         // res.redirect("/register")
     }
 }
+
+exports.logOut = (req, res)=>{
+    res.clearCookie("token")
+    res.redirect("/login")
+}

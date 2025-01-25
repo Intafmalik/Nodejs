@@ -6,8 +6,12 @@
         <a href="/createblog" style="color: white; text-decoration: none; margin: 0 10px;">Create Blog</a>
         <a href="/myblog" style="color: white; text-decoration: none; margin: 0 10px;">User Blog</a>
         <!-- <a href="/contact" style="color: white; text-decoration: none; margin: 0 10px;">Contact</a> -->
+        <% if(currentUser){ %>
+            <a href="/logout" style="color: white; text-decoration: none; margin: 0 10px;">Logout</a>
+            <% }else{ %>
+             <a href="/register" style="color: white; text-decoration: none; margin: 0 10px;">Register</a>
+            <a href="/login" style="color: white; text-decoration: none; margin: 0 10px;">Login</a>
+            <% } %>
 
-        <a href="/register" style="color: white; text-decoration: none; margin: 0 10px;">Register</a>
-        <a href="/login" style="color: white; text-decoration: none; margin: 0 10px;">Login</a>
     </div>
 </div>

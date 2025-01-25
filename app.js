@@ -22,6 +22,12 @@ require("./model/index")
 
 PORT = process.env.PORT || 3000
 
+app.use((req, res, next)=>{
+
+    res.locals.currentUser = req.cookies.token
+    next()
+})
+
 // Creating a router it is also called  middleware
 app.use("",blogRouter) //localhost:3000 + /createblog === localhost:3000/createblog (createblog route is imported from blogRoute)
 
@@ -30,7 +36,6 @@ app.use("",blogRouter) //localhost:3000 + /createblog === localhost:3000/createb
 app.use("",userRouter)//localhost:3000 + /createblog === localhost:3000/createblog (createblog route is imported from blogRoute)
 
 // app.use("/hello",blogRouter) // localhost:3000/hello + /createblog === localhost:3000/createblog (createblog route is imported from blogRoute)
-
 
 // app.get("/", allBlog)
 
