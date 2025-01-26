@@ -1,7 +1,8 @@
 const { user } = require("../../model")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
- require('dotenv').config(); // require dotenv and initilizing it with default configuration
+const sendEmail = require("../../services/sendEmail");
+require('dotenv').config(); // require dotenv and initilizing it with default configuration
 
 exports.renderRegister = (req, res) => {
     res.render("register")
@@ -62,4 +63,30 @@ exports.loginPostMethod = async (req, res) => {
 exports.logOut = (req, res)=>{
     res.clearCookie("token")
     res.redirect("/login")
+}
+
+exports.renderForgotPassword = (req,res)=>{
+    res.render("forgotPassword")
+}
+exports.forgotPswPostMethod = async(req, res)=>{
+    const email = req.body.email
+    if(!email) return res.send("Please provide an email")
+
+    const emailExist = await user.findAll({
+        where:{
+            email:email
+        }
+    })  
+    if(emailExist.length == 0){
+        res.send("Provided email doesnot exist in DB")
+    }else{
+        await sendEmail({
+            email:email,
+            subject:"Your Password OTP verification: ",
+            OTP:1234,
+        })
+        // console.log(emailExist)
+        res.send("Email Sent successfully!!")
+    }
+    
 }
