@@ -11,7 +11,7 @@ const sendEmail = async (option)=>{
     })
 
     const mailOption = {
-        from:'"Hello Abbal Adhikari, " <079BCT029@ioepc.edu.np>',
+        from:'"Forgot password OTP verification, " <079BCT029@ioepc.edu.np>',
         to:option.email,
         subject:option.subject,
         text:"Your OTP is "+ option.OTP
@@ -23,13 +23,7 @@ const sendEmail = async (option)=>{
     } catch (error) {
         console.log("Error in sending email: ",error)        
     }
-    // await transporter.sendMail(mailOption,(err,info)=>{
-    //     if(err){
-    //         console.log("Error in sending email: ",err)
-    //     }else{
-    //         console.log("Email sent: ",info)
-    //     }
-    // })
+
 }
 
 module.exports = sendEmail

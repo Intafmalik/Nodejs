@@ -5,6 +5,7 @@ const { renderCreateBlog, renderContactForm, postCreateBlog, contactFormRegistra
 const  blogRouter  = require('./routes/blogRouter');
 const userRouter = require("./routes/authRouter")
 const cookieParser = require('cookie-parser');
+const { decodeToken } = require('./services/decodeToken');
 const app = express()
 
 
@@ -22,9 +23,16 @@ require("./model/index")
 
 PORT = process.env.PORT || 3000
 
-app.use((req, res, next)=>{
+app.use(async(req, res, next)=>{
 
-    res.locals.currentUser = req.cookies.token
+    res.locals.currentUser = req.cookies.token // declaring global variable (currentUser)
+    const token = req.cookies.token
+    if(token){
+        const decryptedResult = await decodeToken(token, process.env.SECRETEKEY)
+        if(decryptedResult && decryptedResult.id){
+            res.locals.currentUserId = decryptedResult.id
+        }
+    }
     next()
 })
 

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
 const {promisify} = require("util")
 const { user } = require("../model")
+const { decodeToken } = require("../services/decodeToken")
 
 exports.isAuthenticated = async (req,res,next)=>{
     const token = req.cookies.token
@@ -10,7 +11,9 @@ exports.isAuthenticated = async (req,res,next)=>{
         return res.send("Token must be provided")
     }
     // verify token if it legs or not
-    const decryptedResult = await promisify(jwt.verify)(token,process.env.SECRETEKEY)
+    // const decryptedResult = await promisify(jwt.verify)(token,process.env.SECRETEKEY)
+
+    const decryptedResult = await decodeToken(token,process.env.SECRETEKEY)
     // console.log(decryptedResult)
     const UserExits = await user.findAll({
         where:{
