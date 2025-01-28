@@ -133,8 +133,7 @@ exports.otpVerify =async (req, res)=>{
         }else{
             console.log(" OTP Time Expired")
             res.redirect("/login")
-        }
-    
+        }   
 }
 
 exports.renderChangePswd = (req, res)=>{
@@ -162,7 +161,7 @@ exports.handlePasswordChanger = async (req, res)=>{
     if(newPassword !== confirmNewPassword){
         res.send("New Password and confirm new password didnot match")
     }
-
+    
     // rechecking  if email and otp exist 
     const userData = await user.findAll({
         where:{
@@ -173,11 +172,9 @@ exports.handlePasswordChanger = async (req, res)=>{
     if (userData.length == 0){
         return res.send("Provided email with otp didnot match")
     }else{
-        updatePswd[0].password = newPassword
+        updatePswd[0].password = bcrypt.hashSync(newPassword,10)
         await updatePswd[0].save()
         res.redirect("/login")
 
     }
-
-
 }
