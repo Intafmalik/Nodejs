@@ -26,8 +26,8 @@ exports.registerPostMethod = async (req, res) => {
 }
 
 exports.renderLogin = (req, res) => {
-
-    res.render("login")
+    const error = req.flash("error")
+    res.render("login",{error})
 }
 
 
@@ -51,10 +51,11 @@ exports.loginPostMethod = async (req, res) => {
             })
             res.cookie("token", token) //browser ma application tab vanni ma save gar vane ko
             // console.log(token)
-
+            req.flash("success","Login SuccessFully!!")
             res.redirect("/")
         } else {
-            res.send("Invalid Email or Password")
+            req.flash("error","Invalid Email or Password")
+            res.redirect("/login")
         }
     } else {
         res.send("User with that email doesnot exist")
@@ -84,7 +85,7 @@ exports.forgotPswPostMethod = async (req, res) => {
     } else {
         const randomOTPGenerate = Math.floor(10000 * Math.random(9999))
         const otpGenerateTime = Date.now()
-        
+
         await sendEmail({
             email: email,
             subject: "Your Password OTP verification: ",
@@ -94,87 +95,96 @@ exports.forgotPswPostMethod = async (req, res) => {
         emailExist[0].otp = randomOTPGenerate
         emailExist[0].otpExpireTime = otpGenerateTime
         emailExist[0].save()
-        
+
         // console.log(emailExist)
         // res.send("Email Sent successfully!!")
-        res.redirect("/otp?email="+email)
+        res.redirect("/otp?email=" + email)
     }
 }
 
-exports.renderOtpVerify = (req, res)=>{
+exports.renderOtpVerify = (req, res) => {
     const email = req.query.email
-    res.render("otpVerify",{email})
+    res.render("otpVerify", { email })
 }
 
-exports.otpVerify =async (req, res)=>{
+exports.otpVerify = async (req, res) => {
     const email = req.params.id
     const otp = req.body.otp
-    console.log(email)
-    console.log(otp)
-    if(!email || !otp)
+    if (!email || !otp)
         res.send("Provid a valid OTP")
 
-    const ExistOtp = await  user.findAll({
-        where:{
-            email:email,
-            otp:otp
+    const ExistOtp = await user.findAll({
+        where: {
+            email: email,
+            // otp: otp,
         }
     })
-    if(ExistOtp.length == 0){
-        res.send("Email doesnot exist")
+    // console.log("ExistOTP",ExistOtp)
+    if (ExistOtp.length === 0) {
+        return res.send("Email does not exist")
     }
-        const currenTime = Date.now()
+
+    if (ExistOtp[0].otp !== otp) {
+        return res.send("Invalid OTP")
+    }
+    const currenTime = Date.now()
     const timeDiff = currenTime - ExistOtp[0].otpExpireTime
-        if(timeDiff < 120000){
-            // ExistOtp[0].otp = null
-            // ExistOtp[0].otpExpireTime = null
-            // ExistOtp[0].save()
-            res.redirect(`/changePassword?email=${email}&otp=${otp}`)
-        }else{
-            console.log(" OTP Time Expired")
-            res.redirect("/login")
-        }   
+
+    if (timeDiff < 120000) {
+        res.redirect(`/changePassword?email=${email}&otp=${otp}`)
+    } else {
+        console.log(" OTP Time Expired")
+        res.redirect("/login")
+    }
 }
 
-exports.renderChangePswd = (req, res)=>{
+
+exports.renderChangePswd = (req, res) => {
     const email = req.query.email
     const otp = req.query.otp
-    if(!email || !otp){
+    if (!email || !otp) {
         return res.send("Email and otp should be provided in the query")
     }
-    res.render("changePassword",{email, otp})
+    res.render("changePassword", { email, otp })
 }
 
-exports.handlePasswordChanger = async (req, res)=>{
+exports.handlePasswordChanger = async (req, res) => {
     const otp = req.params.otp
-    const email = req.params.email  
-    console.log(otp, email)
+    const email = req.params.email
     const newPassword = req.body.newPassword
     const confirmNewPassword = req.body.confirmNewPassword
-    console.log(newPassword, confirmNewPassword)
+    const currentGeneratedTime = Date.now()
+
 
     // const {newPassword, confirmNewPassword} = req.body
-    if(!newPassword || !confirmNewPassword || !email || !otp )
-    {
+    if (!newPassword || !confirmNewPassword || !email || !otp) {
         return res.send("Please provide newPassword, confirm  Password otp for Existing email")
     }
-    if(newPassword !== confirmNewPassword){
+    
+    if (newPassword !== confirmNewPassword) {
         res.send("New Password and confirm new password didnot match")
     }
-    
+
     // rechecking  if email and otp exist 
     const userData = await user.findAll({
-        where:{
-            email:email,
-            otp:otp
+        where: {
+            email: email,
+            otp: otp
         }
     })
-    if (userData.length == 0){
+    if (userData.length == 0) {
         return res.send("Provided email with otp didnot match")
-    }else{
-        updatePswd[0].password = bcrypt.hashSync(newPassword,10)
-        await updatePswd[0].save()
-        res.redirect("/login")
+    } else {
+        const otpGenerateTime = userData[0].otpExpireTime
+
+        if(currentGeneratedTime-otpGenerateTime <= 180000){
+
+            userData[0].password = bcrypt.hashSync(newPassword, 10)
+            await userData[0].save()
+            res.redirect("/login")
+        }else{
+            res.redirect("/forgotPassword")
+        }
 
     }
 }

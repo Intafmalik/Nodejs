@@ -3,6 +3,7 @@ const fs = require('fs');
 
 
 exports.allBlog = async (req, res) => {
+    const success = req.flash("success")
 
     const allBlogs = await blog.findAll({
         include: {
@@ -10,7 +11,7 @@ exports.allBlog = async (req, res) => {
         }
     })
     // console.log(allBlogs)
-    res.render("blog", { name: "Blogs", allBlogs })
+    res.render("blog", { name: "Blogs", allBlogs,success })
 }
 
 exports.renderCreateBlog = (req, res) => {
@@ -158,7 +159,6 @@ exports.renderMyblog = async (req, res) => {
             model: user
         }
     })
-    console.log(myblog)
     res.render("myBlog", { myblog })
 
 }

@@ -31,7 +31,6 @@ db.blog = require("./blogModel.js")(sequelize,DataTypes)
 db.user.hasMany(db.blog)
 db.blog.belongsTo(db.user)
 
-
 db.sequelize.sync({force:false}).then(()=>{
     console.log("yes re-sync done")
 })

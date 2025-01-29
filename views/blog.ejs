@@ -10,6 +10,7 @@
 <%- include("./components/navbar") %>
 
     <!-- Card -->
+    <h3 id="topUp"><%= success %></h3>
      <div style="display: grid; grid-template-columns: auto auto auto auto; gap: 20px; padding: 20px; ">
         <% if (allBlogs.length ==0) { %>
             <h2 style=" margin-left:10px ">Empty blog</h2>
@@ -37,4 +38,11 @@
     </div>
 
 </body>
+<script>
+    let topUp = document.getElementById("topUp")
+    setTimeout(()=>{
+        topUp.style.display = "none"
+
+    },3000)
+</script>
 </html>

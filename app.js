@@ -6,8 +6,12 @@ const  blogRouter  = require('./routes/blogRouter');
 const userRouter = require("./routes/authRouter")
 const cookieParser = require('cookie-parser');
 const { decodeToken } = require('./services/decodeToken');
-const app = express()
 
+// importing expression-session and connecr-flash 
+const  session = require('express-session')
+const flash = require("connect-flash")
+
+const app = express()
 
 app.set("view engine", "ejs")
 // to handle the form comming from the url or parse the data comming from the url
@@ -18,6 +22,13 @@ app.use(express.static("public"))
 app.use(express.static("uploads"))
 
 app.use(cookieParser())
+
+app.use(session({
+    secret :"HelloWorld", //secret key we can write any thing just to keep secrete from hackeer
+    resave:false,
+    saveUninitialized:true, // if the key and value is same then valriable is save without any chnage but it is false then same value will be save multiple time
+}))
+app.use(flash())
 
 require("./model/index")
 
