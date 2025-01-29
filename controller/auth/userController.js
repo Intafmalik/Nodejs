@@ -110,8 +110,10 @@ exports.renderOtpVerify = (req, res) => {
 exports.otpVerify = async (req, res) => {
     const email = req.params.id
     const otp = req.body.otp
-    if (!email || !otp)
-        res.send("Provid a valid OTP")
+    if (!email || !otp){
+   req.flash("error","Unable to get valid email & OTP")
+   res.redirect("/forgotPassword")
+    }
 
     const ExistOtp = await user.findAll({
         where: {
@@ -125,7 +127,8 @@ exports.otpVerify = async (req, res) => {
     }
 
     if (ExistOtp[0].otp !== otp) {
-        return res.send("Invalid OTP")
+       req.flash("error","Invalid OTP")
+        return res.redirect("/forgotPassword")
     }
     const currenTime = Date.now()
     const timeDiff = currenTime - ExistOtp[0].otpExpireTime
