@@ -91,6 +91,7 @@
   <div class="mainBody">
   <div class="registration-form">
     <h2>Register</h2>
+    <p id="error" style="color: red;"><%= error  %></p>
     <form action="/register" method=POST>
       <div class="form-group">
         <label for="username">Username</label>
@@ -118,4 +119,10 @@
   </div>
   </div>
   </body>
+  <script>
+    const errMsg = document.getElementById("error")
+    setTimeout(()=>{
+      errMsg.style.display = "none"
+    },5000)
+  </script>
 </html>

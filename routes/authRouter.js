@@ -1,9 +1,10 @@
 const { renderRegister, renderLogin, registerPostMethod, loginPostMethod, logOut, renderForgotPassword, forgotPswPostMethod, otpVerify, renderOtpVerify, renderChangePswd, handlePasswordChanger } = require('../controller/auth/userController');
+const {tryCatch} = require("../services/tryCatch")
 
 const router = require('express').Router();
 
-router.route("/register").get(renderRegister).post(registerPostMethod)
-router.route("/login").get(renderLogin).post(loginPostMethod)
+router.route("/register").get(tryCatch(renderRegister)).post(tryCatch(registerPostMethod))
+router.route("/login").get(tryCatch(renderLogin)).post(tryCatch(loginPostMethod))
 router.route("/logout").get(logOut)
 router.route("/forgotPassword").get(renderForgotPassword).post(forgotPswPostMethod)
 router.route("/otp").get(renderOtpVerify)

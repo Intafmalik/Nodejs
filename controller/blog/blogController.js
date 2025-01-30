@@ -1,15 +1,25 @@
 const { blog, user } = require("../../model")
 const fs = require('fs');
-
+const db = require("../../model/index");
+const { QueryInterface, QueryTypes } = require("sequelize");
+const sequelize = db.sequelize
 
 exports.allBlog = async (req, res) => {
     const success = req.flash("success")
+
+    // this is ORM formate to find all blog from db
 
     const allBlogs = await blog.findAll({
         include: {
             model: user
         }
     })
+    
+    // finding all blog using sequelize query type 
+    // const allBlogs = await sequelize.query("SELECT * FROM blogs",{
+    //     type:sequelize.QueryTypes.SELECT,
+    // })
+
     // console.log(allBlogs)
     res.render("blog", { name: "Blogs", allBlogs,success })
 }
@@ -31,13 +41,25 @@ exports.postCreateBlog = async (req, res) => {
     if (!title || !subtitle || !description || !filename)
         return res.send("Fill the data to create the blog.")
 
-    await blog.create({
-        title: title,
-        subtitle: subtitle,
-        description: description,
-        userId: userId,
-        image: process.env.PROJECT_URL + filename
+    // await blog.create({
+    //     title: title,
+    //     subtitle: subtitle,
+    //     description: description,
+    //     userId: userId,
+    //     image: process.env.PROJECT_URL + filename
 
+    // })
+
+
+    // query to make seperate blog table for each user
+   await sequelize.query(`CREATE TABLE IF NOT EXISTS blog_${req.userId}(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, title VARCHAR(255), subtitle VARCHAR(255), description VARCHAR(255), userId INT REFERENCES users(id), image VARCHAR(255))`,{
+        type: sequelize.QueryTypes.CREATE
+    })
+
+    // inserting data 
+    await sequelize.query(`INSERT INTO blog_${req.userId}(title, subtitle,description,userId,image)VALUES(?,?,?,?,?)`,{
+        type: QueryTypes.INSERT,
+        replacements:[title,subtitle,description,req.userId,process.env.PROJECT_URL+filename]
     })
     // console.log(req.body)
     res.redirect("/")
@@ -56,7 +78,8 @@ exports.contactFormRegistration = async (req, res) => {
 
 exports.renderSingleBlog = async (req, res) => {
     const id = req.params.id
-    // first method to find id of the blog it return an array with size 1 inside the array the object is return like [{}]
+    // first ORM method to find id of the blog it return an array with size 1 inside the array the object is return like [{}]
+
     const singleBlog = await blog.findAll({
         where: {
             id: id
@@ -69,6 +92,15 @@ exports.renderSingleBlog = async (req, res) => {
     // const singleBlog = await blog.findByPk(id)
     // console.log(singleBlog)
 
+    // finding blog iby using sequilize query formate
+    // esle dutai model lai comibne garera single obj return garxa in array formate
+
+//   const singleBlog = await sequelize.query("SELECT * FROM blogs JOIN users on blogs.id = users.id WHERE blogs.id = ?",{
+//         replacements:[id],
+//         type: sequelize.QueryTypes.SELECT,
+//     })
+
+    
     res.render("singleBlog", { singleBlog, name: "Blogs" })
 }
 

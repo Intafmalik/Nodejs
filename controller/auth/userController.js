@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sendEmail = require("../../services/sendEmail");
 const { use } = require("../../routes/authRouter");
-const { where } = require("sequelize");
 require('dotenv').config(); // require dotenv and initilizing it with default configuration
 
 exports.renderRegister = (req, res) => {
-    res.render("register")
+    const error = req.flash("error")
+    res.render("register",{error})
 }
 exports.registerPostMethod = async (req, res) => {
     const { username, email, password, confirmPassword } = req.body
