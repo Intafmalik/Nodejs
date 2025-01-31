@@ -14,14 +14,14 @@ exports.allBlog = async (req, res) => {
             model: user
         }
     })
-    
+
     // finding all blog using sequelize query type 
     // const allBlogs = await sequelize.query("SELECT * FROM blogs",{
     //     type:sequelize.QueryTypes.SELECT,
     // })
 
     // console.log(allBlogs)
-    res.render("blog", { name: "Blogs", allBlogs,success })
+    res.render("blog", { name: "Blogs", allBlogs, success })
 }
 
 exports.renderCreateBlog = (req, res) => {
@@ -52,15 +52,15 @@ exports.postCreateBlog = async (req, res) => {
 
 
     // This is multitalent architecture
-    // query to make seperate blog table for each user
-   await sequelize.query(`CREATE TABLE IF NOT EXISTS blog_${req.userId}(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, title VARCHAR(255), subtitle VARCHAR(255), description VARCHAR(255), userId INT REFERENCES users(id), image VARCHAR(255))`,{
+    // query to make seperate blog table for each user in db
+    await sequelize.query(`CREATE TABLE IF NOT EXISTS blog_${req.userId}(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, title VARCHAR(255), subtitle VARCHAR(255), description VARCHAR(255), userId INT REFERENCES users(id), image VARCHAR(255))`, {
         type: sequelize.QueryTypes.CREATE
     })
 
-    // inserting data 
-    await sequelize.query(`INSERT INTO blog_${req.userId}(title, subtitle,description,userId,image)VALUES(?,?,?,?,?)`,{
+    // inserting data in db
+    await sequelize.query(`INSERT INTO blog_${req.userId}(title, subtitle,description,userId,image)VALUES(?,?,?,?,?)`, {
         type: QueryTypes.INSERT,
-        replacements:[title,subtitle,description,req.userId,process.env.PROJECT_URL+filename]
+        replacements: [title, subtitle, description, req.userId, process.env.PROJECT_URL + filename]
     })
     // console.log(req.body)
     res.redirect("/")
@@ -96,12 +96,12 @@ exports.renderSingleBlog = async (req, res) => {
     // finding blog iby using sequilize query formate
     // esle dutai model lai comibne garera single obj return garxa in array formate
 
-//   const singleBlog = await sequelize.query("SELECT * FROM blogs JOIN users on blogs.id = users.id WHERE blogs.id = ?",{
-//         replacements:[id],
-//         type: sequelize.QueryTypes.SELECT,
-//     })
+    //   const singleBlog = await sequelize.query("SELECT * FROM blogs JOIN users on blogs.id = users.id WHERE blogs.id = ?",{
+    //         replacements:[id],
+    //         type: sequelize.QueryTypes.SELECT,
+    //     })
 
-    
+
     res.render("singleBlog", { singleBlog, name: "Blogs" })
 }
 
@@ -137,30 +137,30 @@ exports.postEditblog = async (req, res) => {
     //     }
     // })
     const oldData = await blog.findAll({
-        where:{
-            id:id
+        where: {
+            id: id
         }
     })
-  let fileUrl
+    let fileUrl
     if (!oldData) {
         res.send("BLog not found")
         return
     } else {
-        if(req.file){
+        if (req.file) {
             fileUrl = process.env.PROJECT_URL + req.file.filename
             const oldImagePath = oldData[0].image
             const lengthOfUnwanted = "http://localhost:3000/".length
             const fileNameInUploadFolder = oldImagePath.slice(lengthOfUnwanted)
             const filePath = `uploads/${fileNameInUploadFolder}`
-            fs.unlink(filePath, (error)=>{
-                if(error){
-                    res.send("Error While deleting the file",error)
-                }else{
+            fs.unlink(filePath, (error) => {
+                if (error) {
+                    res.send("Error While deleting the file", error)
+                } else {
                     console.log("File deleted sucessfully")
                 }
             })
-        
-        }else{
+
+        } else {
             fileUrl = oldData[0].image
         }
 
@@ -168,7 +168,7 @@ exports.postEditblog = async (req, res) => {
             title: title,
             subtitle: subtitle,
             description: description,
-            image:fileUrl
+            image: fileUrl
         }, {
             where: {
                 id: id
