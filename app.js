@@ -6,6 +6,8 @@ const  blogRouter  = require('./routes/blogRouter');
 const userRouter = require("./routes/authRouter")
 const cookieParser = require('cookie-parser');
 const { decodeToken } = require('./services/decodeToken');
+const rateLimit = require("express-rate-limit")  // time limit for max otp with in that time
+
 
 // importing expression-session and connecr-flash 
 const  session = require('express-session')
@@ -22,6 +24,14 @@ app.use(express.static("public"))
 app.use(express.static("uploads"))
 
 app.use(cookieParser())
+
+const limiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+	limit: 5, // Limit each IP to 100 requests per `window` (here, per 5 minutes).
+})
+
+// Apply the rate limiting middleware to route forgotPassword requests.
+app.use("/forgotPassword",limiter)
 
 app.use(session({
     secret :"HelloWorld", //secret key we can write any thing just to keep secrete from hackeer

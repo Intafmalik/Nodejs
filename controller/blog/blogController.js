@@ -41,14 +41,14 @@ exports.postCreateBlog = async (req, res) => {
     if (!title || !subtitle || !description || !filename)
         return res.send("Fill the data to create the blog.")
 
-    // await blog.create({
-    //     title: title,
-    //     subtitle: subtitle,
-    //     description: description,
-    //     userId: userId,
-    //     image: process.env.PROJECT_URL + filename
+    await blog.create({
+        title: title,
+        subtitle: subtitle,
+        description: description,
+        userId: userId,
+        image: process.env.PROJECT_URL + filename
 
-    // })
+    })
 
 
     // This is multitalent architecture
