@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const { decodeToken } = require('./services/decodeToken');
 const rateLimit = require("express-rate-limit")  // time limit for max otp with in that time
 
+const helmet = require("helmet")
 
 // importing expression-session and connecr-flash 
 const  session = require('express-session')
@@ -32,6 +33,8 @@ const limiter = rateLimit({
 
 // Apply the rate limiting middleware to route forgotPassword requests.
 app.use("/forgotPassword",limiter)
+
+app.use(helmet())  //  header can be configured
 
 app.use(session({
     secret :"HelloWorld", //secret key we can write any thing just to keep secrete from hackeer
