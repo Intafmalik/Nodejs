@@ -1,12 +1,12 @@
 <div style="background-color: #333; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
     <div style="font-size: 24px; font-weight: bold;">My Blogs</div>
     <div>
-        <a href="/" style="color: white; text-decoration: none; margin: 0 10px;">Home</a>
-        <a href="/template/resturant/index.html" style="color: white; text-decoration: none; margin: 0 10px;">Template</a>
-        <a href="/createblog" style="color: white; text-decoration: none; margin: 0 10px;">Create Blog</a>
-        <a href="/myblog" style="color: white; text-decoration: none; margin: 0 10px;">User Blog</a>
         <!-- <a href="/contact" style="color: white; text-decoration: none; margin: 0 10px;">Contact</a> -->
         <% if(currentUser){ %>
+            <a href="/" style="color: white; text-decoration: none; margin: 0 10px;">Home</a>
+            <a href="/template/resturant/index.html" style="color: white; text-decoration: none; margin: 0 10px;">Template</a>
+            <a href="/createblog" style="color: white; text-decoration: none; margin: 0 10px;">Create Blog</a>
+            <a href="/myblog" style="color: white; text-decoration: none; margin: 0 10px;">User Blog</a>
             <a href="/logout" style="color: white; text-decoration: none; margin: 0 10px;">Logout</a>
             <% }else{ %>
              <a href="/register" style="color: white; text-decoration: none; margin: 0 10px;">Register</a>

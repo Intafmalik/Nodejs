@@ -10,7 +10,7 @@ const rateLimit = require("express-rate-limit")  // time limit for max otp with 
 
 const helmet = require("helmet")
 
-// importing expression-session and connecr-flash 
+// importing expression-session and connect-flash 
 const  session = require('express-session')
 const flash = require("connect-flash")
 

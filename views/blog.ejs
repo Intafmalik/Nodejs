@@ -13,7 +13,7 @@
     <h3 id="topUp"><%= success %></h3>
      <div style="display: grid; grid-template-columns: auto auto auto auto; gap: 20px; padding: 20px; ">
         <% if (allBlogs.length ==0) { %>
-            <h2 style=" margin-left:10px ">Empty blog</h2>
+            <h2 style=" margin-left:10px ">Welcome To Blog</h2>
             
        <%  } else { %>
         <% allBlogs.forEach(blog => { %>
@@ -43,6 +43,6 @@
     setTimeout(()=>{
         topUp.style.display = "none"
 
-    },3000)
+    },2000)
 </script>
 </html>

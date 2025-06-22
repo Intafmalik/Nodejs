@@ -11,8 +11,10 @@ exports.renderRegister = (req, res) => {
 }
 exports.registerPostMethod = async (req, res) => {
     const { username, email, password, confirmPassword } = req.body
-    if (password != confirmPassword)
-        return res.send("Password error!!")
+    if (password != confirmPassword){
+        req.flash("error","Password error!!")
+     res.redirect("/register")
+    }
 
     const userData = await user.create({
         username,
